@@ -1,4 +1,3 @@
-"use client"
 
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { ArrowRight, FileEdit, LineChart, UserPlus, Users } from "lucide-react";
@@ -7,11 +6,13 @@ import { FeatureCards } from "@/components/feature-cards";
 import { Testimonials } from "@/components/TestimonialCarousel";
 import FAQs from "@/components/FAQs";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
-import { useRouter } from "next/navigation";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import Link from "next/link";
+
 
 export default function Home() {
 
-  const router = useRouter();
 
   const howItWorks = [
     {
@@ -45,39 +46,45 @@ export default function Home() {
 
   return (
     <div>
+      <Header />
 
       <div className="hero flex flex-col space-y-2 items-center justify-center min-h-screen w-full text-center px-10 sm:px-16 lg:px-24">
         <h2 className="text-5xl sm:text-7xl font-semibold bg-gradient-to-r from-gray-500 via-gray-200 to-gray-500 bg-clip-text text-transparent py-4">Move a <b>Mile Extra <br /> </b>on your <b>Career Prep</b> journey.</h2>
         <h3 className="text-xl mb-5 font-semibold text-gray-400 ">With your very own AI Career Coach&apos;s Personalized Guidance. </h3>
-        <button
-        onClick={() => router.push("/dashboard")}
-        className="relative mb-12 inline-flex h-12 overflow-hidden rounded-lg p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-          <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-          <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-slate-950 px-6 text-sm font-medium text-white backdrop-blur-3xl flex gap-2 items-center">
-            Get Started <ArrowRight size={"18px"} />
-          </span>
-        </button>
+        <Link href={"/dashboard"}>
+          <button
+            className="relative mb-12 inline-flex h-12 overflow-hidden rounded-lg p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-slate-950 px-6 text-sm font-medium text-white backdrop-blur-3xl flex gap-2 items-center">
+              Get Started <ArrowRight size={"18px"} />
+            </span>
+          </button>
+        </Link>
         <BackgroundBeams />
       </div>
 
-      <div className="relative w-[80%] mx-auto h-80 sm:h-92 -mt-40 sm:-mt-20 rounded-lg overflow-hidden">
+      <div className="relative w-full min-h-fit rounded-lg overflow-hidden pt-20 mb-20">
         <Image
           src="/heroImage.png" // public folder image
           alt="Hero Banner"
           fill // fills parent container
-          className="object-cover object-top"
+          className="object-cover object-top absolute -z-50"
           priority // preload on page load
         />
-        <div className="overlay absolute top-0 left-0 bg-black/30 z-10 h-full w-full"></div>
-      </div>
+        <div className="overlay absolute top-0 left-0 bg-black/40 -z-40 h-full w-full"></div>
 
 
-      <div className="features" id="features">
-        <h2 className=" mt-32 text-xl sm:text-3xl px-8 font-semibold text-center">Features to Fuel Your Career Breakthrough.</h2>
-        <div className="feature">
+
+        <div className="features" id="features">
+
+          <h2 className="text-xl sm:text-3xl px-8 font-semibold text-center backdrop-blur">Features to Fuel Your Career Breakthrough.</h2>
           <FeatureCards />
+
         </div>
       </div>
+
+
+
 
 
       <div className="extras grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 px-6 sm:px-12 lg:px-24 gap-8 bg-black/50 shadow-lg shadow-gray-800 py-16">
@@ -127,17 +134,19 @@ export default function Home() {
           <h2 className="text-4xl mb-2 font-bold text-gray-100">Ready to push through your Limits.</h2>
           <p className="text-gray-400 mb-4">Join thousands of students who aced there 1st offer. Professionals who leveled up and switched.</p>
 
-          <button
-          onClick={() => router.push("/dashboard")}
-          className="relative inline-flex h-12 overflow-hidden rounded-lg p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-          <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-          <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-slate-950 px-6 text-sm font-medium text-white backdrop-blur-3xl flex gap-2 items-center">
-            Get Started <ArrowRight size={"18px"} />
-          </span>
-        </button>
+          <Link href={"/dashboard"}>
+            <button
+              className="relative inline-flex h-12 overflow-hidden rounded-lg p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+              <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+              <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-slate-950 px-6 text-sm font-medium text-white backdrop-blur-3xl flex gap-2 items-center">
+                Get Started <ArrowRight size={"18px"} />
+              </span>
+            </button>
+          </Link>
         </div>
       </div>
 
+      <Footer />
     </div>
   );
 }
