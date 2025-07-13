@@ -9,7 +9,7 @@ const Footer = () => {
     const router = useRouter();
 
     return (
-        <footer className="h-20 space-y-2 border-t border-gray-600 flex flex-col justify-center items-center text-sm gap-2 text-gray-400">
+        <footer className="h-20 backdrop-blur bg-black/60 space-y-2 border-t border-gray-600 flex flex-col justify-center items-center text-sm gap-2 text-gray-400">
             <div className="flex gap-2 sm:gap-6 justify-center items-center">
                 <p>Made with ❤️ by Nihal Bhardwaj.</p>
                 <a target="_blank" href="https://x.com/bhardwajnihal21" ><FaXTwitter className="hover:text-blue-400 text-lg" /></a>

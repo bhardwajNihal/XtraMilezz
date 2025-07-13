@@ -47,7 +47,7 @@ export default function Home() {
     <div>
 
       <div className="hero flex flex-col space-y-2 items-center justify-center min-h-screen w-full text-center px-10 sm:px-16 lg:px-24">
-        <h2 className="text-5xl sm:text-7xl font-semibold text-gray-200 bg-gradient-to-r from-gray-500 via-gray-200 to-gray-500 bg-clip-text text-transparent py-4">Move a <b>Mile Extra <br /> </b>on your <b>Career Prep</b> journey.</h2>
+        <h2 className="text-5xl sm:text-7xl font-semibold bg-gradient-to-r from-gray-500 via-gray-200 to-gray-500 bg-clip-text text-transparent py-4">Move a <b>Mile Extra <br /> </b>on your <b>Career Prep</b> journey.</h2>
         <h3 className="text-xl mb-5 font-semibold text-gray-400 ">With your very own AI Career Coach&apos;s Personalized Guidance. </h3>
         <button
         onClick={() => router.push("/dashboard")}
