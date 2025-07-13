@@ -67,6 +67,8 @@ model IndustryInsight{
 
   lastUpdated       DateTime    @default(now())
   nextUpdate        DateTime    
+
+  @@index([industry])   //fast filter based on industry
 }
 
 model Assessment{
