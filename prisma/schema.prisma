@@ -58,9 +58,9 @@ model IndustryInsight{
 
   salaryRanges       Json[]    // Array of { role: string, min: float, max: float, median: float, location: string? }
   growthRate         Float
-  demandLevel        String       // "High", "Medium", "Low"
+  demandLevel        DemandLevel       // "High", "Medium", "Low"
   topSkills          String[]
-  marketOutlook      String         // "Positive", "Neutral", "Negative"
+  marketOutlook      MarketOutlook         // "Positive", "Neutral", "Negative"
   keyTrends          String[]
   recommendedSkills  String[]  
 
@@ -103,4 +103,16 @@ model CoverLetter{
   updatedAt       DateTime  @updatedAt
 
   @@index([userId])     // for fast filter
+}
+
+enum DemandLevel{
+  HIGH 
+  MEDIUM 
+  LOW
+}
+
+enum MarketOutlook{
+  POSITIVE 
+  NEUTRAL 
+  NEGETIVE
 }
