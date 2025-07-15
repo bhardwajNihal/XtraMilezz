@@ -11,6 +11,7 @@ import z from 'zod';
 import useFetch from '@/customHooks/useFetch';
 import { onboardUser } from '@/actions/onboarding';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface IndustryDataType {
     id: string;
@@ -22,6 +23,7 @@ type onboardingFormType = z.infer<typeof onboardingSchema>
 
 const OnboardingForm = ({ industries }: { industries: IndustryDataType[] }) => {
 
+    const router = useRouter();
     const [selectedIndustry, setSelectedIndustry] = useState<IndustryDataType | undefined>();
 
     const { register,
@@ -55,18 +57,19 @@ const OnboardingForm = ({ industries }: { industries: IndustryDataType[] }) => {
         if(onboardedData && !onboardLoading){
             toast.success("User Onboarded Successfully!");
             reset();
-            setSelectedIndustry(undefined)
+            setSelectedIndustry(undefined);
+            router.push("/dashboard")
         }
-    },[onboardedData,onboardLoading,reset])
+    },[onboardedData,onboardLoading,reset,router])
 
     return (
-        <div className='flex justify-center items-center pt-4'>
+        <div className='w-full lg:w-1/2 flex justify-center items-center px-8 lg:px-16'>
 
             <form 
             onSubmit={handleSubmit(submitOnboardingForm)}
-            className='w-full lg:w-1/2 space-y-3'>
+            className='w-full space-y-3'>
                 <h1 className='text-xl lg:text-3xl font-bold text-center'>Onboarding Form</h1>
-                <h2 className='text-gray-300 text-center mb-4 -mt-2'>Fill in the details to get personalized guidance</h2>
+                <h2 className='text-gray-300 text-center mb-4 -mt-2'>Fill in the details to let us know you better.</h2>
 
                 <div className="industry">
                     <label htmlFor="industry" className='font-semibold'>Select Industry</label>
@@ -154,7 +157,10 @@ const OnboardingForm = ({ industries }: { industries: IndustryDataType[] }) => {
                     )}
                 </div>
                 
-                <button className=' border border-gray-400 rounded cursor-pointer py-2 px-6' type='submit'>Submit</button>
+                    <button 
+                disabled={onboardLoading}
+                className='border border-gray-400 hover:bg-black rounded cursor-pointer py-2 w-full sm:w-1/2' type='submit'>{onboardLoading ? "Submitting...":"Submit"}</button>
+    
             </form>
 
         </div>

@@ -6,7 +6,7 @@ function useFetch<TArgs, TReturn>( cb: (args: TArgs) => Promise<TReturn>) {
 //   type ResponseData = Awaited<ReturnType<T>>;
 
   const [data, setData] = useState<TReturn | null>(null);
-  const [loading, setLoading] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<boolean | undefined>();
   const [error, setError] = useState<Error | null>(null);
 
   const fn = async (args : TArgs) => {

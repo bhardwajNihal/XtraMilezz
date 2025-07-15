@@ -10,9 +10,9 @@ const SigninPage = () => {
   return (
     <div className="min-h-screen w-full flex">
 
-      <div className="logo text-3xl font-black absolute top-0 left-0 text-gray-300 z-50 mt-12 ml-8">XtraMilezz</div>
+      <div className="logo text-2xl font-black absolute top-12 left-8 text-gray-300 z-50 ">XtraMilezz</div>
 
-      <div className="relative image w-2/3 h-screen hidden lg:block">
+      <div className="relative image w-1/2 h-screen hidden lg:block">
         <Image
           src="/login_image.png" // public folder image
           alt="Hero Banner"
@@ -22,12 +22,12 @@ const SigninPage = () => {
         />
         <div className="overlay flex items-center flex justify-center flex-col h-full w-full absolute top-0 left-0 bg-black/50 z-40 backdrop-blur-xs">
 
-          <h2 className='text-9xl font-black bg-gradient-to-br from-gray-600 via-gray-200 to-gray-800 bg-clip-text text-transparent '>Prepare. <br />Apply. <br />Grab.</h2>
+          <h2 className='text-8xl font-black bg-gradient-to-br from-gray-600 via-gray-200 to-gray-800 bg-clip-text text-transparent '><div className='mb-6'>Prepare.</div><div className='mb-6'>Apply.</div>Grab.</h2>
         </div>
 
       </div>
 
-      <div className="authcard w-full lg:w-1/3 h-screen p-8 flex flex-col gap-2 justify-center itmes-center">
+      <div className="authcard w-full lg:w-1/2 h-screen p-8 lg:p-16 flex flex-col gap-2 justify-center itmes-center">
 
           <div
             className={cn(
