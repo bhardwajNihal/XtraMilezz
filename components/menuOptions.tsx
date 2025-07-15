@@ -1,6 +1,6 @@
 
 "use client"
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
@@ -31,7 +31,10 @@ const MenuOptions = () => {
                 Sign In
             </button>
         </div>
-        : <div className='text-white'>{session.data?.user?.name}</div>
+        : <div className='text-white'>
+            <span>{session.data?.user?.name}</span>
+            <button className='border border-gray-500 py-1 px-4 ml-4 rounded' onClick={() => signOut({callbackUrl:"/"})}>Logout</button>
+        </div>
         }
         </>
     )

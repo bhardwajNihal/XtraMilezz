@@ -9,7 +9,7 @@ export async function checkUser() {
         console.log("session : ",session);
         
         if(!session?.user){
-            return null;
+            return null;    
         }
     
         const foundUser = await DbClient.user.findUnique({
