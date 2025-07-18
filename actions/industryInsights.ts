@@ -1,3 +1,5 @@
+
+"use server"
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { DbClient } from "@/db/dbClient";
@@ -17,9 +19,9 @@ export async function generateAiIndustryInsights(industry: string) {
               { "role": "string", "min": number, "max": number, "median": number, "location": "string" }
             ],
             "growthRate": number,
-            "demandLevel": "High" | "Medium" | "Low",
+            "demandLevel": "HIGH" | "MEDIUM" | "LOW",
             "topSkills": ["skill1", "skill2"],
-            "marketOutlook": "Positive" | "Neutral" | "Negative",
+            "marketOutlook": "POSITIVE" | "NEUTRAL" | "NEGATIVE",
             "keyTrends": ["trend1", "trend2"],
             "recommendedSkills": ["skill1", "skill2"]
           }
@@ -44,7 +46,7 @@ export async function generateAiIndustryInsights(industry: string) {
   }
 }
 
-export async function getAiIndustryInsights() {
+export async function getIndustryInsights() {
   try {
     // check for valid session
     const session = await getServerSession(authOptions);
@@ -71,6 +73,8 @@ export async function getAiIndustryInsights() {
 
     if (foundIndustryInsight) return foundIndustryInsight;
 
+    // If insights not found
+    // create a new one and return
     const industry = foundUser.industry;
     if (!industry) {
       throw new Error("User not onboarded!");

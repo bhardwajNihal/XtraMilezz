@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {ClipLoader} from "react-spinners"
 import { getUserOnboardingStatus } from '@/actions/onboarding'
-
+import { getIndustryInsights } from '@/actions/industryInsights'
 const Dashboard = () => {
 
   const router = useRouter()
@@ -26,9 +26,12 @@ const Dashboard = () => {
       if(!isOnboarded.Onboarded){
         router.push("/onboarding")
       }
+      const insights = await getIndustryInsights();
+      console.log("----industryInsights----", insights);
     }
     checkOnboardingStatus();
   },[router])
+
 
   if(status==="loading") return <div className='min-h-screen w-full flex justify-center items-center'><ClipLoader size={"30px"} color='gray'/></div>
 
