@@ -3,6 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { DbClient } from "@/db/dbClient";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { generateAiIndustryInsights } from "./industryInsights";
 
 interface onboardingFormDatatype {
   industry: string;
@@ -45,19 +46,13 @@ export async function onboardUser(data: onboardingFormDatatype) {
     //if not create new one, ai generated
         if (!industryInsight) {
           // fetching ai insights later
-          // const insights = await generateAIInsights(data.industry);
+          const insights = await generateAiIndustryInsights(data.industry);
 
           // creating dummy insight to provide to the db, with default values
           industryInsight = await tx.industryInsight.create({
             data: {
               industry: data.industry,
-              salaryRanges: [],
-              marketOutlook: "NEUTRAL",
-              demandLevel: "MEDIUM",
-              keyTrends: [],
-              growthRate: 0,
-              topSkills: [],
-              recommendedSkills: [],
+              ...insights,
               nextUpdate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
             },
           });
