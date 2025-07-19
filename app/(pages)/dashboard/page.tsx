@@ -67,8 +67,8 @@ const Dashboard = () => {
   return (
     <div className='min-h-screen w-full sm:w-[95%] px-4 sm:px-8 lg:px-20 pt-10 mx-auto container'>
 
-      <div className='flex justify-between'>
-        <h2 className='text-xl sm:text-3xl font-black'>Industry Insights.</h2>
+      <div className='flex justify-between space-y-2'>
+        <h2 className='text-2xl sm:text-4xl text-gray-200 font-black'>Industry Insights.</h2>
         <Badge className='last-updated bg-zinc-900 border border-gray-560 text-white'>last Updated {insights?.lastUpdated && formatDistanceToNow(new Date(insights.lastUpdated!), { addSuffix: true })}</Badge>
       </div>
 
@@ -80,7 +80,7 @@ const Dashboard = () => {
         <div className="cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-2">
 
           {/* Market Outlook Card */}
-          <div className="relative h-40 bg-gradient-to-br from-gray-800 to-gray-950 text-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-5 flex flex-col justify-between overflow-hidden">
+          <div className="relative h-40 bg-gradient-to-br from-gray-800 to-black text-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-5 flex flex-col justify-between overflow-hidden">
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Market Outlook</h2>
               {insights?.marketOutlook === "POSITIVE"
@@ -103,7 +103,7 @@ const Dashboard = () => {
 
 
           {/* Industry Growth Rate Card */}
-          <div className="relative h-40 bg-gradient-to-br from-gray-800 to-gray-950 text-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-5 flex flex-col justify-between overflow-hidden">
+          <div className="relative h-40 bg-gradient-to-br from-gray-800 to-black text-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-5 flex flex-col justify-between overflow-hidden">
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Industry Growth Rate</h2>
               <BarChart3 className='text-blue-400' size={"20px"} />
@@ -119,7 +119,7 @@ const Dashboard = () => {
           </div>
 
           {/* Market Demand Card */}
-          <div className="relative h-40 bg-gradient-to-br from-gray-800 to-gray-950 text-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-5 flex flex-col justify-between overflow-hidden">
+          <div className="relative h-40 bg-gradient-to-br from-gray-800 to-black text-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-5 flex flex-col justify-between overflow-hidden">
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Market Demand</h2>
               <FaMoneyBills className='text-teal-400' size={"20px"} />
@@ -140,11 +140,11 @@ const Dashboard = () => {
           </div>
 
           {/* Top Skills Card */}
-          <div className="relative h-40 bg-gradient-to-br from-gray-800 to-gray-950 text-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-5 flex flex-col overflow-hidden scrollbar-hide">
+          <div className="relative h-40 bg-gradient-to-br from-gray-800 to-black text-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out p-5 flex flex-col overflow-hidden scrollbar-hide">
             <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3">Top Skills of the Industry</h2>
             <div className="flex flex-wrap gap-2 overflow-y-auto scrollbar-hide">
               {insights?.topSkills.map(skill => (
-                <Badge key={skill} className='bg-gray-700 text-gray-200 hover:bg-gray-600 transition-colors duration-200 text-xs px-3 py-1 rounded-full'>
+                <Badge key={skill} className='bg-gray-800 text-gray-200 hover:bg-gray-600 transition-colors duration-200 text-xs px-3 py-1 rounded-lg'>
                   {skill}
                 </Badge>
               ))}
