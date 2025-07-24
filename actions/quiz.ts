@@ -73,7 +73,9 @@ interface questionType {
     explanation: string
 }
 
-export async function assessQuiz(questions:questionType[], answers:string[]) {
+export async function assessQuiz({questions,answers}: {questions:questionType[]|null, answers:string[]}) {
+  
+  if(questions==null) return;
   
   const session = await getServerSession(authOptions);
   if (!session?.user) {
@@ -158,16 +160,9 @@ export async function assessQuiz(questions:questionType[], answers:string[]) {
       })
 
       return assessment;
-      
+
     } catch (error) {
       throw error;
     }
-
-
-  // userId
-  // quizScore      Float     //  quiz score
-  // questions      Json[]    // Array of {question, answer, userAnswer, isCorrect, explanation}
-  // category       String    // "Technical", "Behavioral", etc.
-  // improvementTip
 
 }

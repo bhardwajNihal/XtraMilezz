@@ -1,5 +1,5 @@
 "use client"
-import { generateQuiz } from '@/actions/quiz'
+import { assessQuiz, generateQuiz } from '@/actions/quiz'
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import useFetch from '@/customHooks/useFetch'
@@ -14,7 +14,11 @@ interface questionType {
 }
 const InterviewPage = () => {
 
-    const [questions, setQuestions] = useState<questionType[] | null>(null);
+    const [questions, setQuestions] = useState<questionType[] | null>(() => {
+    const stored = localStorage.getItem("quiz_questions");
+    return stored ? JSON.parse(stored) : null;
+    });
+
     const [answers, setAnswers] = useState<string[]>(() => {
         const stored = localStorage.getItem("quiz_answers");
         return stored ? JSON.parse(stored) : Array(10).fill(null)
@@ -25,6 +29,12 @@ const InterviewPage = () => {
         fn: quizFn,
         loading: quizLoading
     } = useFetch(generateQuiz);
+
+    const {
+        data: assessmentData,
+        loading: assessmentLoading,
+        fn : assessmentFn
+    } = useFetch(assessQuiz);
 
 // persisting selected questions and selected answers accross reloads, via localstorage
 // fetching them again when the page mounts
@@ -40,22 +50,8 @@ const InterviewPage = () => {
         if(answers) localStorage.setItem("quiz_answers", JSON.stringify(answers));
     }, [answers])
 
-    // refetching last saved questions and respective answers on reload
-    useEffect(() => {
-        const storedQuestions = localStorage.getItem("quiz_questions");
-        const storedAnswers = localStorage.getItem("quiz_answers");
 
-        if (storedQuestions) {
-            setQuestions(JSON.parse(storedQuestions));
-        }
-
-        if (storedAnswers) {
-            setAnswers(JSON.parse(storedAnswers));
-        }
-    }, []);
-
-
-    async function handleAnswerClick(quesNum:number, selectedOption:string) {
+    function handleAnswerClick(quesNum:number, selectedOption:string) {
         setAnswers( prev => {
             const updated = [...prev];
             updated[quesNum] = selectedOption;
@@ -63,13 +59,21 @@ const InterviewPage = () => {
         })
     }
 
-    function handleQuizSubmit(){
-        console.log(answers);
+    async function handleQuizSubmit(){
+        const assessment = await assessmentFn({questions,answers});
+        console.log(assessment);
+        
         localStorage.removeItem("quiz_questions");
         localStorage.removeItem("quiz_answers");
         setQuestions(null);
         setAnswers(Array(10).fill(null));
     }
+
+    useEffect(() => {
+        if(assessmentData && !assessmentLoading){
+            console.log(assessmentData);
+        }
+    },[assessmentData,assessmentLoading])
 
     return (
         <div className='w-[80%] min-h-screen mx-auto pt-10'>
@@ -98,7 +102,7 @@ const InterviewPage = () => {
 
                     <button
                     onClick={handleQuizSubmit}
-                    className='bg-gray-300 text-black font-semibold hover:bg-gray-400 px-8 mt-4 py-3 rounded'>Submit Quiz</button>
+                    className='bg-gray-300 text-black font-semibold hover:bg-gray-400 px-8 mt-4 py-3 rounded'>{assessmentLoading ? <span><ClipLoader size={"16px"} color='black'/> Submitting...</span> : "Submit Quiz"}</button>
                 </div>
 
 
@@ -111,7 +115,7 @@ const InterviewPage = () => {
                         className='bg-gray-300 text-black font-semibold hover:bg-gray-400 px-8 mt-4 py-3 rounded'>
                         {quizLoading ? <ClipLoader size={"18px"} color='black' /> : "Start Assessment"}
                     </button>
-                    {quizLoading && <p className='mt-1'>Generating best questions...</p>}
+                    {quizLoading && <p className='mt-1'>Wait a while, Generating questions...</p>}
                 </div>}
         </div>
     )
