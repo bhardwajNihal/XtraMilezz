@@ -34,20 +34,17 @@ const Quizresult = ({ result, setResult }:
                     <h2 className="text-xl sm:text-3xl font-extrabold text-neutral-50 tracking-tight">
                         Assessment Result
                     </h2>
-                    <button
-                        disabled={loading}
-                        onClick={handleRetake}
-                        className='py-2 px-6 bg-gray-200 text-black rounded cursor-pointer hover:bg-gray-300'>Retake Quiz</button>
+                    
                 </div>
 
                 <div className="mb-10">
                     <h3 className="text-xl sm:text-xl font-bold text-gray-300 mb-4">Quiz score<span className='text-3xl text-white ml-4 font-bold ml-2'>{result.quizScore} <span className='text-xl text-gray-300'>/ 10</span></span></h3>
-                    <div className="bg-neutral-800 p-5 rounded-lg border-l-4 border-neutral-700">
+                    {result.improvementTip && <div className="bg-neutral-800 p-5 rounded-lg border-l-4 border-neutral-700">
                         <h2 className='text-lg font-black'>Improvement Tip</h2>
                         <p className="leading-relaxed text-neutral-400">
                             {result.improvementTip}
                         </p>
-                    </div>
+                    </div>}
                 </div>
 
                 <div>
