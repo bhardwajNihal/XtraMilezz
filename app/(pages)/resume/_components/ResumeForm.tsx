@@ -2,17 +2,22 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Plus, Sparkles, X } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { resumeSchema } from '@/zod-schemas/resumeSchema'
 import { z } from "zod"
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import ExperienceForm from './ExperienceForm'
-
+import useFetch from '@/customHooks/useFetch'
+import { enhanceWithAI } from '@/actions/resume'
+import { toast } from 'sonner'
+import { ClipLoader } from 'react-spinners'
 
 export type resumeType = z.infer<typeof resumeSchema>
 
 const ResumeForm = () => {
+
+    const [enhancing, setEnhancing] = useState<string | null>(null);
 
     const {
         register,
@@ -46,6 +51,16 @@ const ResumeForm = () => {
         name: "projects"
     })
 
+
+    const {
+        fn: enhanceContentFn
+    } = useFetch(enhanceWithAI)
+
+    async function handleEnhanceContent(type: string, content: string) {
+
+        return await enhanceContentFn({ currentContent: content, type: type });
+
+    }
 
 
 
@@ -100,7 +115,22 @@ const ResumeForm = () => {
                 <Label htmlFor='bio' className='font-semibold'>Bio *</Label>
                 <Textarea {...register("bio")} id='bio' placeholder='Write a professional bio. . .' />
                 {errors?.bio && <p className='text-sm text-red-600'>{errors.bio?.message}</p>}
-                <button className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'><Sparkles size={"16px"} color='white' /><span>Enhance with AI</span></button>
+                <button
+                    type='button'
+                    onClick={async () => {
+                        const content = watch("bio");
+                        if (!content) {
+                            toast.error("Please describe your bio briefly to enhance!");
+                            return;
+                        }
+                        setEnhancing("bio");
+                        const enhancedBio = await handleEnhanceContent("bio", content)
+                        setValue("bio", enhancedBio);
+                        setEnhancing(null);
+                        toast.success("Bio enhanced successfully!")
+                    }}
+                    disabled={enhancing === "bio"}
+                    className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'>{enhancing === "bio" ? <ClipLoader size={"16px"} color='white' /> : <Sparkles size={"16px"} color='white' />}<span>{enhancing === "bio" ? "Enhancing..." : "Enhance with AI"}</span></button>
             </div>
 
             <div className="skills space-y-1">
@@ -133,6 +163,9 @@ const ResumeForm = () => {
                             errors={errors}
                             register={register}
                             setValue={setValue}
+                            enhancing={enhancing}
+                            setEnhancing={setEnhancing}
+                            handleEnhanceContent={handleEnhanceContent}
                         />
                     </div>
                 )}
@@ -172,8 +205,27 @@ const ResumeForm = () => {
 
                         <Label htmlFor={`certifications.${index}.description`}>Description</Label>
                         <Textarea {...register(`certifications.${index}.description`)} placeholder='Briefly describe what you learnt...' />
-                        <button className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'><Sparkles size={"16px"} color='white' /><span>Enhance with AI</span></button>
                         {errors.certifications?.[index]?.description && <p className='text-sm text-red-600'>{errors.certifications?.[index].description.message}</p>}
+
+                        <button
+                            type='button'
+                            onClick={async () => {
+                                const content = watch(`certifications.${index}.description`);
+                                const title = watch(`certifications.${index}.title`);
+                                if (!content) {
+                                    toast.error("Atleast provide a brief description about certification, to enhance!");
+                                    return;
+                                }
+                                setEnhancing(`certifications.${index}.description`);
+                                const enhancedCertDisc = await handleEnhanceContent(`certification(${title})`, content)
+                                setValue(`certifications.${index}.description`, enhancedCertDisc);
+                                setEnhancing(null);
+                                toast.success("Certificate Description enhanced successfully!")
+                            }}
+                            disabled={enhancing === `certifications.${index}.description`}
+                            className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'>
+                            {enhancing === `certifications.${index}.description` ? <ClipLoader size={"16px"} color='white' /> : <Sparkles size={"16px"} color='white' />}<span>{enhancing === `certifications.${index}.description` ? "Enhancing..." : "Enhance with AI"}</span>
+                        </button>
 
                         <Label htmlFor={`certifications.${index}.issuedOn`}>Completed On</Label>
                         <Input {...register(`certifications.${index}.issuedOn`)} type='month' className='w-fit' />
@@ -212,8 +264,27 @@ const ResumeForm = () => {
 
                         <Label htmlFor={`projects.${index}.description`}>Description</Label>
                         <Textarea {...register(`projects.${index}.description`)} placeholder='Briefly describe your project (stack, features, etc). . .' />
-                        <button className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'><Sparkles size={"16px"} color='white' /><span>Enhance with AI</span></button>
                         {errors.projects?.[index]?.description && <p className='text-sm text-red-600'>{errors.projects?.[index].description.message}</p>}
+
+                        <button
+                            type='button'
+                            onClick={async () => {
+                                const content = watch(`projects.${index}.description`);
+                                const title = watch(`projects.${index}.title`);
+                                if (!content) {
+                                    toast.error("Atleast provide a brief description about project, to enhance!");
+                                    return;
+                                }
+                                setEnhancing(`projects.${index}.description`);
+                                const enhancedProjectDisc = await handleEnhanceContent(`project(title-${title})`, content)
+                                setValue(`projects.${index}.description`, enhancedProjectDisc);
+                                setEnhancing(null);
+                                toast.success("Project Description enhanced successfully!")
+                            }}
+                            disabled={enhancing === `projects.${index}.description`}
+                            className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'>
+                            {enhancing === `projects.${index}.description` ? <ClipLoader size={"16px"} color='white' /> : <Sparkles size={"16px"} color='white' />}<span>{enhancing === `projects.${index}.description` ? "Enhancing..." : "Enhance with AI"}</span>
+                        </button>
 
                         <Label htmlFor={`projects.${index}.completedOn`}>Completed On</Label>
                         <Input {...register(`projects.${index}.completedOn`)} type='month' className='w-fit' />
@@ -253,7 +324,26 @@ const ResumeForm = () => {
                         <Textarea {...register(`achievements.${index}.description`)} placeholder='Briefly describe your experience, learnings, challenges, etc. . .' />
                         {errors.achievements?.[index]?.description && <p className='text-sm text-red-600'>{errors.achievements?.[index].description.message}</p>}
 
-                        <button className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'><Sparkles size={"16px"} color='white' /><span>Enhance with AI</span></button>
+                        <button
+                            type='button'
+                            onClick={async () => {
+                                const content = watch(`achievements.${index}.description`);
+                                const title = watch(`achievements.${index}.title`);
+                                if (!content) {
+                                    toast.error("Atleast provide a brief description about your Achievement, to enhance!");
+                                    return;
+                                }
+                                setEnhancing(`achievements.${index}.description`);
+                                const enhancedProjectDisc = await handleEnhanceContent(`achievement(title-${title})`, content)
+                                setValue(`achievements.${index}.description`, enhancedProjectDisc);
+                                setEnhancing(null);
+                                toast.success("Achievement Description enhanced successfully!")
+                            }}
+                            disabled={enhancing === `achievements.${index}.description`}
+                            className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'>
+                            {enhancing === `achievements.${index}.description` ? <ClipLoader size={"16px"} color='white' /> : <Sparkles size={"16px"} color='white' />}<span>{enhancing === `achievements.${index}.description` ? "Enhancing..." : "Enhance with AI"}</span>
+                        </button>
+                        
                     </div>
                 </div>)}
 
@@ -268,7 +358,7 @@ const ResumeForm = () => {
             </div>
 
             <button
-            type='submit'
+                type='submit'
                 className='bg-gray-300 text-black font-semibold hover:bg-gray-400 px-8 mt-4 py-3 rounded'>
                 Save resume
             </button>

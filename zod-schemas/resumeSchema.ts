@@ -28,7 +28,7 @@ export const resumeSchema = z.object({
     z.object({
         title: z.string().min(1, "please specify Project title."),
         description: z.string().min(1, "briefly describe your project atleast. . ."),
-        completedOn: z.string().min(1, "please specify issue date.")
+        completedOn: z.string().min(1, "please specify completion date.")
     })
   ),
 

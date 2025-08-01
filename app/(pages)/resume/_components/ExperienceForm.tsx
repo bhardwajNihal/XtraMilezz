@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { SetStateAction, useEffect } from 'react'
 import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { resumeType } from './ResumeForm'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Sparkles } from 'lucide-react'
+import { toast } from 'sonner'
+import { ClipLoader } from 'react-spinners'
 
 
 type experienceFormType = {
@@ -13,9 +15,12 @@ type experienceFormType = {
     setValue: UseFormSetValue<resumeType>,
     watch: UseFormWatch<resumeType>,
     errors: FieldErrors<resumeType>,
+    enhancing: string | null,
+    setEnhancing: React.Dispatch<SetStateAction<string | null>>
+    handleEnhanceContent: (type: string, content: string) => Promise<string>   
 }
 
-const ExperienceForm = ({ index, register, setValue, watch, errors }: experienceFormType) => {
+const ExperienceForm = ({ index, register, setValue, watch, errors, enhancing, setEnhancing, handleEnhanceContent }: experienceFormType) => {
 
     const currentlyWorking = watch(`experience.${index}.currentlyWorking`);
 
@@ -43,7 +48,28 @@ const ExperienceForm = ({ index, register, setValue, watch, errors }: experience
             <Label htmlFor={`experience.${index}.description`}>Description</Label>
             <Textarea {...register(`experience.${index}.description`)} placeholder='Briefly describe your role. . .' />
             {errors.experience?.[index]?.description && <p className='text-sm text-red-600'>{errors.experience?.[index].description.message}</p>}
-            <button className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'><Sparkles size={"16px"} color='white' /><span>Enhance with AI</span></button>
+         {/*enhacing content button  */}
+            <button 
+                type='button'
+                onClick={async() => {
+                    const content = watch(`experience.${index}.description`);
+                    const company = watch(`experience.${index}.organization`);
+                    const role = watch(`experience.${index}.role`);
+                    if(!content){
+                        toast.error("Atleast provide some details to enhance!");
+                        return;
+                    }
+                    setEnhancing(`experience.${index}.description`);
+                    const enhancedExpDesc = await handleEnhanceContent(`experience(company: ${company}, role: ${role})`,content)
+                    setValue(`experience.${index}.description`, enhancedExpDesc);
+                    setEnhancing(null);
+                    toast.success("Experience Description enhanced successfully!")
+                }}
+                disabled={enhancing===`experience.${index}.description`}
+                className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'>
+                    {enhancing===`experience.${index}.description` ? <ClipLoader size={"16px"} color='white' /> : <Sparkles size={"16px"} color='white' />}<span>{enhancing===`certifications.${index}.description` ? "Enhancing..." : "Enhance with AI"}</span>
+                </button>
+            
         </div>
         <div className="timeline space-y-2">
             <div className='flex gap-2 sm:gap-6 '>

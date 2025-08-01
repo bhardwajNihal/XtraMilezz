@@ -97,7 +97,7 @@ const InterviewPage = () => {
                 questions: item.questions as unknown as questionType[],
             }));
             setPastAssessments(parsedData)
-            console.log(parsedData);
+            // console.log(parsedData);
 
         }
         getpassAssesmentts();

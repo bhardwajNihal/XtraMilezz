@@ -77,10 +77,10 @@ export async function getResume() {
 
 export async function enhanceWithAI({
   currentContent,
-  type,
+  type,     
 }: {
   currentContent: string;
-  type: string;
+  type: string;             // bio, experience, project, achievement
 }) {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
