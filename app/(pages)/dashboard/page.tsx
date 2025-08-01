@@ -44,7 +44,7 @@ const Dashboard = () => {
     async function checkOnboardingStatus() {
 
       const isOnboarded = await getUserOnboardingStatus();
-      console.log("isOnboarded : ", isOnboarded);
+      // console.log("isOnboarded : ", isOnboarded);
 
       if (!isOnboarded.Onboarded) {
         router.push("/onboarding")
