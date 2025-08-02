@@ -41,7 +41,9 @@ model Resume{
   id          String    @id @default(cuid())
   userId      String    @unique    // 1-to-1 relation with user
   user        User      @relation(fields: [userId], references: [id])
-  content     String    @db.Text // Markdown content
+  // prisma can handle raw objects, no need to stringify form values (complex objects) before storing
+  data        Json      // actual form data to prefil resume form
+  content     String    @db.Text // Markdown content for resume preview
   atsScore    Float?
   feedback    String?
   createdAt   DateTime  @default(now())
