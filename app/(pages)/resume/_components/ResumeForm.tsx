@@ -2,22 +2,24 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Plus, Sparkles, X } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { resumeSchema } from '@/zod-schemas/resumeSchema'
 import { z } from "zod"
 import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import ExperienceForm from './ExperienceForm'
 import useFetch from '@/customHooks/useFetch'
-import { enhanceWithAI } from '@/actions/resume'
+import { enhanceWithAI, getResume, saveResume } from '@/actions/resume'
 import { toast } from 'sonner'
-import { ClipLoader } from 'react-spinners'
+import { BarLoader, ClipLoader } from 'react-spinners'
 
 export type resumeType = z.infer<typeof resumeSchema>
 
 const ResumeForm = () => {
 
     const [enhancing, setEnhancing] = useState<string | null>(null);
+    const [existingResume, setExistingResume] = useState<resumeType | null>(null);
+    const [existingResumeLoading, setExistingResumeLoading] = useState(false)
 
     const {
         register,
@@ -25,9 +27,10 @@ const ResumeForm = () => {
         formState: { errors },
         control,
         watch,
-        setValue
+        setValue,
+        reset
     } = useForm<resumeType>({
-        resolver: zodResolver(resumeSchema)
+        resolver: zodResolver(resumeSchema),
     })
 
     // we can use useFieldArray to add/remove entries dynamically for sections with multiple entries
@@ -62,16 +65,60 @@ const ResumeForm = () => {
 
     }
 
+    // todo
+    // to add try catch to each enhance operation
+
+    const {
+        data: savedResume,
+        loading: savingResume,
+        fn: saveResumeFn,
+    } = useFetch(saveResume)
 
 
     async function handleResumeSubmit(data: resumeType) {
-        console.log(data);
+        await saveResumeFn(data);
     }
+
+    useEffect(() => {
+        if (savedResume && savingResume) {
+            toast.success("resume saved Successfully!")
+        }
+    }, [savedResume, savingResume])
+
+    // fetching existing resume if any
+    useEffect(() => {
+        async function fetchExistingResume() {
+            try {
+                setExistingResumeLoading(true);
+                const response = await getResume();
+                const parsed = resumeSchema.safeParse(response?.data);
+                if (parsed.success) {           // parsing responce json to resume schema safely
+                    setExistingResume(parsed.data); // fully typed and safe
+                } else {
+                    console.error("Resume data is invalid:", parsed.error);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setExistingResumeLoading(false);
+            }
+        }
+        fetchExistingResume()
+    }, [])
+
+    useEffect(() => {
+        if(existingResume && !existingResumeLoading){
+            reset(existingResume);
+        }
+    },[existingResume, existingResumeLoading, reset])
+
 
     return (
         <form
             onSubmit={handleSubmit(handleResumeSubmit)}
             className='border border-gray-700 rounded-lg min-h-fit w-full py-8 px-4 sm:px-8 lg:px-12 space-y-6'>
+            
+            {existingResumeLoading && <div className='min-w-full h-3'><BarLoader width={"100%"} color='white'/></div>}
 
             <div className='name space-y-1'>
                 <Label htmlFor='fullname' className='font-semibold'>Full Name *</Label>
@@ -343,7 +390,7 @@ const ResumeForm = () => {
                             className='flex items-center gap-1 border border-gray-500 hover:bg-gray-900 cursor-pointer p-1 px-2 rounded text-sm'>
                             {enhancing === `achievements.${index}.description` ? <ClipLoader size={"16px"} color='white' /> : <Sparkles size={"16px"} color='white' />}<span>{enhancing === `achievements.${index}.description` ? "Enhancing..." : "Enhance with AI"}</span>
                         </button>
-                        
+
                     </div>
                 </div>)}
 
@@ -360,7 +407,7 @@ const ResumeForm = () => {
             <button
                 type='submit'
                 className='bg-gray-300 text-black font-semibold hover:bg-gray-400 px-8 mt-4 py-3 rounded'>
-                Save resume
+                {savingResume ? <span><ClipLoader size={"16px"} color="black" /> Saving...</span> : "Save resume"}
             </button>
 
         </form>

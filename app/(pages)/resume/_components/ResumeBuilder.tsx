@@ -5,19 +5,9 @@ import ResumeForm from './ResumeForm';
 import ResumePreview from './ResumePreview';
 import { Download } from 'lucide-react';
 
-interface ResumeType {
-    id: string;
-    userId: string;
-    content: string;
-    atsScore: number | null;
-    feedback: string | null;
-    createdAt: Date;
-    updatedAt: Date
-}
+const ResumeBuilder = () => {
 
-const ResumeBuilder = ({ initialContent }: { initialContent: ResumeType | null }) => {
-
-    const [tab, setTab] = useState("");
+    const [tab, setTab] = useState("form");
 
     return (
         <div>
@@ -26,7 +16,7 @@ const ResumeBuilder = ({ initialContent }: { initialContent: ResumeType | null }
 
             <Tabs defaultValue="account">
                 <div className='flex justify-between items-center w-full'>
-                    <TabsList>
+                    <TabsList defaultValue={"form"}>
                     <TabsTrigger onClick={() => setTab("form")} value="form">form</TabsTrigger>
                     <TabsTrigger onClick={() => setTab("preview")} value="preview">preview</TabsTrigger>
                 </TabsList>
@@ -36,7 +26,7 @@ const ResumeBuilder = ({ initialContent }: { initialContent: ResumeType | null }
                     <ResumeForm />
                 </TabsContent>
                 <TabsContent value="preview">
-                    <ResumePreview />
+                    <ResumePreview/>
                 </TabsContent>
             </Tabs>
 

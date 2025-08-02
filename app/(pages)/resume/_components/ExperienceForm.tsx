@@ -17,7 +17,7 @@ type experienceFormType = {
     errors: FieldErrors<resumeType>,
     enhancing: string | null,
     setEnhancing: React.Dispatch<SetStateAction<string | null>>
-    handleEnhanceContent: (type: string, content: string) => Promise<string>   
+    handleEnhanceContent: (type: string, content: string) => Promise<string>
 }
 
 const ExperienceForm = ({ index, register, setValue, watch, errors, enhancing, setEnhancing, handleEnhanceContent }: experienceFormType) => {

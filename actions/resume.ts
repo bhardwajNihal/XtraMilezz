@@ -1,5 +1,7 @@
 "use server";
 
+import { generateMarkdown } from "@/app/(pages)/resume/_components/generateMarkdown";
+import { resumeType } from "@/app/(pages)/resume/_components/ResumeForm";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { DbClient } from "@/db/dbClient";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -8,7 +10,7 @@ import { getServerSession } from "next-auth";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
 
-export async function saveResume(content: string) {
+export async function saveResume(content:resumeType) {
   // type to be later refactored
   try {
     const session = await getServerSession(authOptions);
@@ -32,11 +34,13 @@ export async function saveResume(content: string) {
         userId: foundUser.id,
       },
       update: {
-        content,
+        data: content,        // json data for resume form data, as it is, to prefill form if exists
+        content: generateMarkdown(content)    // markdown content to show resume preview
       },
       create: {
         userId: foundUser.id,
-        content,
+        data: content,
+        content: generateMarkdown(content)
       },
     });
 
