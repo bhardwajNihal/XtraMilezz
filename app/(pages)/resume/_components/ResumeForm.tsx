@@ -80,7 +80,7 @@ const ResumeForm = () => {
     }
 
     useEffect(() => {
-        if (savedResume && savingResume) {
+        if (savedResume && !savingResume) {
             toast.success("resume saved Successfully!")
         }
     }, [savedResume, savingResume])

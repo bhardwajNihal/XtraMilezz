@@ -14,9 +14,9 @@ const ResumeBuilder = () => {
 
             <h2 className='text-2xl lg:text-3xl text-gray-200 font-extrabold mb-2'>Resume Builder</h2>
 
-            <Tabs defaultValue="account">
+            <Tabs defaultValue="form">
                 <div className='flex justify-between items-center w-full'>
-                    <TabsList defaultValue={"form"}>
+                    <TabsList>
                     <TabsTrigger onClick={() => setTab("form")} value="form">form</TabsTrigger>
                     <TabsTrigger onClick={() => setTab("preview")} value="preview">preview</TabsTrigger>
                 </TabsList>
