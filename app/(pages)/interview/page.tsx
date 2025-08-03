@@ -7,6 +7,8 @@ import React, { useEffect, useState } from 'react'
 import { ClipLoader } from 'react-spinners';
 import Quizresult from './Quizresult';
 import { formatDate } from 'date-fns';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 interface questionType {
     question: string;
@@ -47,6 +49,15 @@ interface pastAssessmentsType {
 }
 
 const InterviewPage = () => {
+
+    //protecting route
+    const router = useRouter()
+    const { status } = useSession();
+      useEffect(() => {
+        if (status === "unauthenticated") {
+          router.push("/sign-in");
+        }
+      }, [status, router]);
 
     const [questions, setQuestions] = useState<questionType[] | null>(() => {
         const stored = localStorage.getItem("quiz_questions");

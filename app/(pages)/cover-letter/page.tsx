@@ -3,11 +3,21 @@ import { generateCoverLetter } from '@/actions/coverLetter'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Copy } from 'lucide-react'
-import React, { useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 import { ClipLoader } from 'react-spinners'
 import { toast } from 'sonner'
 
 const CoverLetter = () => {
+
+  const router = useRouter()
+  const { status } = useSession();  
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/sign-in");
+    }
+  }, [status, router]);
 
   const [role, setRole] = useState<string | undefined>();
   const [organization, setOrganization] = useState<string | undefined>();
