@@ -53,23 +53,26 @@ const InterviewPage = () => {
     //protecting route
     const router = useRouter()
     const { status } = useSession();
-      useEffect(() => {
+    useEffect(() => {
         if (status === "unauthenticated") {
-          router.push("/sign-in");
+            router.push("/sign-in");
         }
-      }, [status, router]);
+    }, [status, router]);
 
-    const [questions, setQuestions] = useState<questionType[] | null>(() => {
-        const stored = localStorage.getItem("quiz_questions");
-        return stored ? JSON.parse(stored) : null;
-    });
-
-    const [answers, setAnswers] = useState<string[]>(() => {
-        const stored = localStorage?.getItem("quiz_answers");
-        return stored ? JSON.parse(stored) : Array(10).fill(null)
-    })
+    const [questions, setQuestions] = useState<questionType[] | null>(null);
+    const [answers, setAnswers] = useState<string[]>(Array(10).fill(null));
     const [result, setResult] = useState<assessmentType | undefined>(undefined);
     const [pastAssessments, setPastAssessments] = useState<pastAssessmentsType[] | undefined>();
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedQuestions = localStorage.getItem("quiz_questions");
+            const storedAnswers = localStorage.getItem("quiz_answers");
+
+            if (storedQuestions) setQuestions(JSON.parse(storedQuestions));
+            if (storedAnswers) setAnswers(JSON.parse(storedAnswers));
+        }
+    }, []);
 
     const {
         data: quizData,
@@ -188,13 +191,13 @@ const InterviewPage = () => {
 
                     {pastAssessments && <div className='mt-8'>
                         <h2 className='text-xl sm:text-2xl mb-3 font-bold text-start'>Past Assessments</h2>
-                            <ul>
-                                {pastAssessments?.map (data => <li onClick={() => setResult(data)} key={data.id} className='border border-gray-700 rounded px-4 py-2 text-start mb-2 hover:bg-gray-800 cursor-pointer duration-200'>
-                                    <div className='font-bold text-sm text-gray-300'>Taken <span className='font-normal'>{formatDate(new Date(data.createdAt), "EEEE, Mo MMM, yyyy ")}</span></div>
-                                    <span className='font-bold'>Quiz Score {data.quizScore}/10</span>
-                                    
-                                </li>)}
-                            </ul>
+                        <ul>
+                            {pastAssessments?.map(data => <li onClick={() => setResult(data)} key={data.id} className='border border-gray-700 rounded px-4 py-2 text-start mb-2 hover:bg-gray-800 cursor-pointer duration-200'>
+                                <div className='font-bold text-sm text-gray-300'>Taken <span className='font-normal'>{formatDate(new Date(data.createdAt), "EEEE, Mo MMM, yyyy ")}</span></div>
+                                <span className='font-bold'>Quiz Score {data.quizScore}/10</span>
+
+                            </li>)}
+                        </ul>
                     </div>}
 
                 </div>}
