@@ -6,6 +6,7 @@ import ResumePreview from './ResumePreview';
 
 const ResumeBuilder = () => {
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [tab, setTab] = useState("form");
 
     return (
