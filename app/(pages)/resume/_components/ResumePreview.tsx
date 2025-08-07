@@ -30,7 +30,7 @@ const ResumePreview = () => {
   if (loading) return <div className='w-full h-56 flex justify-center items-center'><ClipLoader size={"25px"} color='white' /> Loading Preview...</div>
 
   return (
-    <div className="bg-gray-100 min-h-screen p-8 text-black font-sans w-[85%] mx-auto">
+    <div className="bg-gray-100 min-h-screen p-8 text-black font-sans w-[85%] mx-auto rounded my-4 mb-8">
       <div className="prose prose-invert max-w-none ">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {markdown}

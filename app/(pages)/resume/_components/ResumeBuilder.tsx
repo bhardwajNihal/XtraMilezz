@@ -20,7 +20,7 @@ const ResumeBuilder = () => {
                     <TabsTrigger onClick={() => setTab("form")} value="form">form</TabsTrigger>
                     <TabsTrigger onClick={() => setTab("preview")} value="preview">preview</TabsTrigger>
                 </TabsList>
-                {tab==="preview" && <button className='bg-gray-300 flex gap-2 items-center text-black py-1 px-4 rounded'><Download size={"16px"} color='black'/><span className='hidden sm:block'>Download pdf</span></button>}
+                {/* {tab==="preview" && <button className='bg-gray-300 flex gap-2 items-center text-black py-1 px-4 rounded'><Download size={"16px"} color='black'/><span className='hidden sm:block'>Download pdf</span></button>} */}
                 </div>
                 <TabsContent value="form">
                     <ResumeForm />

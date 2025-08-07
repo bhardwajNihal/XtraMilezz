@@ -65,7 +65,7 @@ const InterviewPage = () => {
     });
 
     const [answers, setAnswers] = useState<string[]>(() => {
-        const stored = localStorage.getItem("quiz_answers");
+        const stored = localStorage?.getItem("quiz_answers");
         return stored ? JSON.parse(stored) : Array(10).fill(null)
     })
     const [result, setResult] = useState<assessmentType | undefined>(undefined);
@@ -186,7 +186,7 @@ const InterviewPage = () => {
                     </button>
                     {quizLoading && <p className='mt-1'>Wait a while, Generating questions...</p>}
 
-                    <div className='mt-8'>
+                    {pastAssessments && <div className='mt-8'>
                         <h2 className='text-xl sm:text-2xl mb-3 font-bold text-start'>Past Assessments</h2>
                             <ul>
                                 {pastAssessments?.map (data => <li onClick={() => setResult(data)} key={data.id} className='border border-gray-700 rounded px-4 py-2 text-start mb-2 hover:bg-gray-800 cursor-pointer duration-200'>
@@ -195,7 +195,8 @@ const InterviewPage = () => {
                                     
                                 </li>)}
                             </ul>
-                    </div>
+                    </div>}
+
                 </div>}
         </div>
     )
