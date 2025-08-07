@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ResumeForm from './ResumeForm';
 import ResumePreview from './ResumePreview';
-import { Download } from 'lucide-react';
 
 const ResumeBuilder = () => {
 
